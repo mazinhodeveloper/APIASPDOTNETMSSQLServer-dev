@@ -1,7 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(); 
+// Other services...
+builder.Services.AddScoped<RepositoryACL>();
 
 var app = builder.Build();
 
