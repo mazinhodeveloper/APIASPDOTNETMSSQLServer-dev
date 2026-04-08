@@ -2,7 +2,7 @@ using Dapper; // Ensure you have Dapper installed via NuGet
 using APIASPDOTNETMSSQLServer.Data.Models;
 using APIASPDOTNETMSSQLServer.Models;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace APIASPDOTNETMSSQLServer.Repositories
 {

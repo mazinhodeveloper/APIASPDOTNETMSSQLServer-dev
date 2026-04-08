@@ -2,12 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY API.csproj .
+# Copia tudo primeiro (evita restore inconsistente)
+COPY . .
+
+# Faz restore com tudo presente
 RUN dotnet restore
 
-COPY . .
-RUN dotnet build --no-restore -c Release
-RUN dotnet publish --no-restore -c Release -o /app/publish
+# Build + publish
+RUN dotnet publish -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime

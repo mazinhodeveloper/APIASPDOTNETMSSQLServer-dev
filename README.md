@@ -6,26 +6,44 @@ A .Net SDK 8.0 to use with C# API Web ASP.NET Core and SQL Server
 No migration, for now only dotnet build and dotnet run.        
 I will use DBeaver, how to connect with SQL Server.               
         
-### Complete project structure      
-APIASPDOTNETMSSQLServer-dev/      
-├── API/      
-│   ├── API.csproj      
-│   ├── Program.cs      
-│   ├── appsettings.json      
-│   └── Dockerfile      
-├── docker-compose.yml      
-├── .gitignore      
-└── .dockerignore       
-      
-       
-### Commands      
+### Complete project structure            
+APIASPDOTNETMSSQLServer-dev/          
+├── API/          
+│   ├── Controllers/          
+│   │   └── ACLController.cs          
+│   ├── Repositories/          
+│   │   └── RepositoryACL.cs           
+│   ├── Data/          
+│   │   └── Models/          
+│   │       └── ACL.cs          
+│   ├── Models/          
+│   │   └── ACLRequestModel.cs          
+│   ├── Properties/          
+│   │   └── launchSettings.json          
+│   ├── API.csproj          
+│   ├── Program.cs          
+│   ├── appsettings.json          
+│   └── Dockerfile          
+├── docker-compose.yml          
+├── .env          
+├── .gitignore          
+└── .dockerignore               
+                 
+### Commands to add NuGet package      
+dotnet add package Microsoft.Data.SqlClient       
+dotnet add package Swashbuckle.AspNetCore         
+dotnet add package Dapper        
+     
 #### Build & start      
-docker compose up -d --build      
+docker compose up -d --build          
+     
+#### Build & start ignores all cached layers      
+docker compose up -d --build --no-cache      
       
 #### View logs      
 docker compose logs -f      
       
-#### Stop      
+#### Stop & remove      
 docker compose down      
       
 #### Stop & remove volumes      
@@ -69,5 +87,11 @@ curl http://localhost:8080/db/test
 
 #### Swagger UI                     
 ##### Open browser        
-http://localhost:8080/swagger           
+http://localhost:8080/swagger                         
+
+#### Endpoint                     
+##### Open browser        
+http://localhost:8080/api/acl          
+http://localhost:8080/api/acl/4         
+
                

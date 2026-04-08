@@ -5,7 +5,7 @@ using APIASPDOTNETMSSQLServer.Repositories;
 
 namespace APIASPDOTNETMSSQLServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/acl")]
     [ApiController]
     public class ACLController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace APIASPDOTNETMSSQLServer.Controllers
             _repository = repository;
         }
 
-        // GET: api/ACL
+        // GET: api/acl
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -24,7 +24,7 @@ namespace APIASPDOTNETMSSQLServer.Controllers
             return Ok(result);
         }
 
-        // GET: api/ACL/5
+        // GET: api/acl/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -33,7 +33,7 @@ namespace APIASPDOTNETMSSQLServer.Controllers
             return Ok(result);
         }
 
-        // POST: api/ACL
+        // POST: api/acl
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ACLRequestModel model)
         {
@@ -49,7 +49,7 @@ namespace APIASPDOTNETMSSQLServer.Controllers
             return CreatedAtAction(nameof(GetById), new { id = newId }, model);
         }
 
-        // PUT: api/ACL/5
+        // PUT: api/acl/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ACLRequestModel model)
         {
@@ -67,7 +67,7 @@ namespace APIASPDOTNETMSSQLServer.Controllers
             return NoContent();
         }
 
-        // DELETE: api/ACL/5
+        // DELETE: api/acl/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -13,11 +13,11 @@ namespace APIASPDOTNETMSSQLServer.Data.Models
         [Required]
         [MaxLength(20)]
         [Column("tipo")]
-        public string Tipo { get; set; }
+        public string Tipo { get; set; } = string.Empty; 
 
         [Required]
         [MaxLength(100)]
         [Column("descricao")]
-        public string Descricao { get; set; }
+        public string Descricao { get; set; } = string.Empty; 
     }
 }
