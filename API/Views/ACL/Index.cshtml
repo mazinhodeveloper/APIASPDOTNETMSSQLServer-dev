@@ -1,0 +1,22 @@
+@model IEnumerable<APIASPDOTNETMSSQLServer.Data.Models.ACL>
+
+<h1>ACL Management</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdACL</td>
+                <td>@item.Tipo</td>
+                <td>@item.Descricao</td>
+            </tr>
+        }
+    </tbody>
+</table>

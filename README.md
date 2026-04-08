@@ -30,16 +30,20 @@ APIASPDOTNETMSSQLServer-dev/
 └── .dockerignore               
                  
 ### Commands to add NuGet package      
-dotnet add package Microsoft.Data.SqlClient       
-dotnet add package Swashbuckle.AspNetCore         
-dotnet add package Dapper        
+dotnet add package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation --version 8.0.0    
+dotnet add package Microsoft.Data.SqlClient --version 8.0.0           
+dotnet add package Swashbuckle.AspNetCore --version 8.0.0             
+dotnet add package Dapper --version 8.0.0            
      
 #### Build & start      
 docker compose up -d --build          
      
 #### Build & start ignores all cached layers      
-docker compose up -d --build --no-cache      
+docker compose build --no-cache; docker compose up -d  
       
+#### Stop api & build & start api        
+docker compose stop api; docker compose up -d --build api      
+       
 #### View logs      
 docker compose logs -f      
       

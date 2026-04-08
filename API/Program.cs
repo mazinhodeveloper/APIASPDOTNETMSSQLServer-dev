@@ -1,37 +1,62 @@
+// Program.cs
 using APIASPDOTNETMSSQLServer.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// MVC with Razor
+builder.Services.AddControllersWithViews()
+       .AddRazorRuntimeCompilation();
+
+// Swagger for APIs
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(); 
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers();
-
+// Dependency injection
 builder.Services.AddScoped<RepositoryACL>();
 
 var app = builder.Build();
 
+// Middleware
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+        c.RoutePrefix = "swagger"; // http://localhost:8080/swagger
+    });
+}
+else
+{
+    app.UseExceptionHandler("/Error");
 }
 
-app.MapControllers();
+app.UseStaticFiles();
+app.UseRouting();
 
-app.MapGet("/", () => "API ASP.NET Core 8.0 + SQL Server - Running!");
+// Map API controllers with /api prefix
+app.MapControllers(); // Your ACLController with [Route("api/acl")]
 
+// Map Razor pages / MVC routes
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
+
+// Optional minimal API endpoints
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
-app.MapGet("/db/test", async () =>
+app.MapGet("/db/test", async (IConfiguration config) =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    await using var connection = new Microsoft.Data.SqlClient.SqlConnection(connectionString);
     try
     {
-        using var connection = new Microsoft.Data.SqlClient.SqlConnection(connectionString);
         await connection.OpenAsync();
-        return Results.Ok(new { 
-            status = "connected", 
+        return Results.Ok(new
+        {
+            status = "connected",
             server = connection.DataSource,
             database = connection.Database
         });
