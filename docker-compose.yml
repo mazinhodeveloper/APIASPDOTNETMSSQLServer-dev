@@ -4,21 +4,23 @@ services:
       context: ./API
       dockerfile: Dockerfile
     container_name: api-dev
+    working_dir: /src/API
+    entrypoint: ["dotnet", "watch", "run", "--urls=http://+:8080"]
     ports:
       - "8080:8080"
     env_file:
       - .env
     environment:
-      # ASP.NET reads "ConnectionStrings__DefaultConnection" and maps it to appsettings.json
-      - ConnectionStrings__DefaultConnection=Server=${SQL_SERVER},${SQL_PORT};Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;
-      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=${SQL_DATABASE};User Id=${SQL_USER};Password=${SQL_PASSWORD};TrustServerCertificate=True;
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
-      # If using JWT, pass them here:
-      # - JWT_SECRET=${JWT_SECRET}
-      # - JWT_EXPIRY_HOURS=${JWT_EXPIRY_HOURS}
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    volumes:
+      - ./API:/src/API
     depends_on:
       mssql:
         condition: service_healthy
+    restart: unless-stopped
     networks:
       - dev-network
 
@@ -33,15 +35,20 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=${SQL_PASSWORD}
       - MSSQL_PID=Developer
+    volumes:
+      - mssql-data:/var/opt/mssql
     healthcheck:
-      # Updated to use ${SQL_PASSWORD} instead of hardcoded password
       test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${SQL_PASSWORD}' -C -Q 'SELECT 1' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 20s
+    restart: unless-stopped
     networks:
       - dev-network
+
+volumes:
+  mssql-data:
 
 networks:
   dev-network:

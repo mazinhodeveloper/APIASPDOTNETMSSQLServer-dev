@@ -1,22 +1,15 @@
-# Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
-# Copia tudo primeiro (evita restore inconsistente)
-COPY . .
+WORKDIR /src/API
 
-# Faz restore com tudo presente
+COPY *.csproj ./
 RUN dotnet restore
 
-# Build + publish
-RUN dotnet publish -c Release -o /app/publish
-
-# Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-WORKDIR /app
-
-COPY --from=build /app/publish .
+COPY . ./
 
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "API.dll"]
+ENV ASPNETCORE_URLS=http://+:8080
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+
+CMD ["dotnet", "watch", "run", "--urls=http://+:8080"]

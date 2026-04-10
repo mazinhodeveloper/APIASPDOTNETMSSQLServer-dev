@@ -1,7 +1,9 @@
-**/bin/
-**/obj/
+bin/
+obj/
 .vs/
+.vscode/
 .git/
-.gitignore
-.dockerignore
+.env
+*.log
 *.md
+node_modules/
